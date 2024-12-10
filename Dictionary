@@ -1,0 +1,11 @@
+def create_dict(words):
+    result={}
+    for word in words:
+        first_char=word[0]
+        if first_char not in result:
+            result[first_char]=[]
+        result[first_char].append(word)
+    return result
+words={'apple','ananya','banana','cat','dog'}
+dictionary=create_dict(words)
+print(dictionary)
