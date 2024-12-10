@@ -1,0 +1,17 @@
+import pandas as pd
+data={
+    'name':['mah','jf','dgs'],
+    'age':[34,56,34],
+    'city':['blr','mng','mul']
+}
+df=pd.DataFrame(data)
+print("Dataset:")
+print(df)
+df.isnull().any(axis=0)
+df.isnull().sum(axis=0)
+print(df.isnull().any(axis=0))
+print(df.isnull().sum(axis=0))
+df.isnull().any(axis=1)
+df.isnull().sum(axis=1)
+print(df[df.isnull().any(axis=1)])
+print(df.isnull().sum(axis=1))
