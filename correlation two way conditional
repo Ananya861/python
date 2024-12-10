@@ -1,0 +1,24 @@
+import pandas as pd 
+import numpy as np
+data={
+    'A':[1,1,0,1],
+    'B':[0,1,1,0]
+}
+df=pd.DataFrame(data)
+print(data)
+joint_freq = pd.crosstab (data['A'], data['B']) 
+joint_prob = joint_freq/joint_freq.values.sum() 
+print("\nJoint Probability Distribution of A and B:")
+print(joint_prob)
+marginal_prob_A = joint_prob.sum(axis=1) 
+print("\nMarginal Probability of A:")
+print(marginal_prob_A)
+marginal_prob_B = joint_prob.sum(axis=0)
+print("\nMarginal Probability of B:")
+print(marginal_prob_B)
+conditional_prob_A_given_B = joint_prob.div(marginal_prob_B, axis=1) 
+print("\nConditional Probability P(A | B):")
+print(conditional_prob_A_given_B)
+conditional_prob_B_given_A = joint_prob.div(marginal_prob_A, axis=0) 
+print("\nConditional Probability P(B | A):")
+print(conditional_prob_B_given_A)
