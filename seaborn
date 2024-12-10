@@ -1,0 +1,32 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+data={
+    'age':[20,25,30],
+    'salary':[2000,3000,4000],
+    'department':['IT','ME','Finance']
+}
+df=pd.DataFrame(data)
+sns.set(style="whitegrid")
+#1
+plt.figure(figsize=(8,5))
+sns.scatterplot(data=df,x='age',y='salary',hue='department',palette='viridis',s=100)
+plt.title("scatter of age vs salary")
+plt.xlabel("age")
+plt.ylabel("salary")
+plt.legend(title='department')
+plt.show()
+#2
+plt.figure(figsize=(8,5))
+sns.histplot(data=df,x='age',bins=5,kde=True,color='blue')
+plt.title("histogram of age distribution")
+plt.xlabel("age")
+plt.ylabel("frequency")
+plt.show()
+#3
+plt.figure(figsize=(8,5))
+sns.countplot(data=df,x='department',palette='pastel')
+plt.title("bar plot of department counts")
+plt.xlabel("department")
+plt.ylabel("nu of employees")
+plt.show()
