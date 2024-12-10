@@ -1,0 +1,13 @@
+import numpy
+import time
+size=1000000
+list1=range(size)
+list2=range(size)
+array1=numpy.arange(size)
+array2=numpy.arange(size)
+initialTime=time.time()
+resultantlist=[(a*b) for a,b in zip(list1,list2)]
+print("time taken by the list:",(time.time()-initialTime,"seconds"))
+initialTime=time.time()
+resultantarray=array1*array2
+print("time taken by numpy arrays:",(time.time()-initialTime,"seconds"))
