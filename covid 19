@@ -1,0 +1,136 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data_url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
+data = pd.read_csv(data_url)
+
+data['date'] = pd.to_datetime(data['date'])
+data = data[['location', 'date', 'total_cases', 'new_cases', 'total_deaths', 'new_deaths']]
+
+
+start_date = pd.to_datetime('2020-01-01')  # starting from 2020
+end_date = pd.to_datetime('2024-12-31')  # until the end of 2024
+filtered_data = data[(data['date'] >= start_date) & (data['date'] <= end_date)]
+
+
+def plot_global_trends():
+    global_data = filtered_data.groupby('date').sum().reset_index()
+
+    plt.figure(figsize=(12, 6))
+    plt.bar(global_data['date'], global_data['total_cases'], label='Total Cases', color='blue', alpha=0.6, width=3)
+    plt.bar(global_data['date'], global_data['total_deaths'], label='Total Deaths', color='red', alpha=0.6, width=3)
+    plt.title('Global COVID-19 Trends (Total Cases and Deaths)')
+    plt.xlabel('Date')
+    plt.ylabel('Count')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_new_cases(country):
+    country_data = filtered_data[filtered_data['location'] == country]
+
+    plt.figure(figsize=(12, 6))
+    plt.bar(country_data['date'], country_data['new_cases'], color='orange', alpha=0.7, width=3)
+    plt.title(f'New COVID-19 Cases in {country} (2020-2024)')
+    plt.xlabel('Date')
+    plt.ylabel('New Cases')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
+def compare_total_cases(countries):
+    country_data = filtered_data[filtered_data['location'].isin(countries)]
+    pivot_data = country_data.pivot(index='date', columns='location', values='total_cases')
+
+    plt.figure(figsize=(12, 6))
+    for country in countries:
+        plt.bar(pivot_data.index, pivot_data[country], label=country, alpha=0.7, width=3)
+
+    plt.title('Total COVID-19 Cases Comparison (2020-2024)')
+    plt.xlabel('Date')
+    plt.ylabel('Total Cases')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_case_death_ratio():
+    global_data = filtered_data.groupby('date').sum().reset_index()
+    global_data['death_to_case_ratio'] = global_data['total_deaths'] / global_data['total_cases']
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(global_data['date'], global_data['death_to_case_ratio'], color='green', label='Death-to-Case Ratio')
+    plt.title('Global Death-to-Case Ratio (2020-2024)')
+    plt.xlabel('Date')
+    plt.ylabel('Death-to-Case Ratio')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
+plot_case_death_ratio()
+
+
+def plot_global_total_deaths():
+    global_data = filtered_data.groupby('date').sum().reset_index()
+
+    plt.figure(figsize=(12, 6))
+    plt.bar(global_data['date'], global_data['total_deaths'], label='Total Deaths', color='red', alpha=0.6, width=3)
+    plt.title('Global Total COVID-19 Deaths (2020-2024)')
+    plt.xlabel('Date')
+    plt.ylabel('Total Deaths')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+# Call the function
+plot_global_total_deaths()
+
+
+def plot_new_vs_total_cases(country):
+    country_data = filtered_data[filtered_data['location'] == country]
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(country_data['date'], country_data['new_cases'], label='New Cases', color='orange', alpha=0.7)
+    plt.plot(country_data['date'], country_data['total_cases'], label='Total Cases', color='blue', alpha=0.7)
+    plt.title(f'New vs Total COVID-19 Cases in {country} (2020-2024)')
+    plt.xlabel('Date')
+    plt.ylabel('Count')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
+plot_new_vs_total_cases('India')
+
+def plot_total_cured():
+    global_data = filtered_data.groupby('date').sum().reset_index()
+    global_data['total_cured'] = global_data['total_cases'] - global_data['total_deaths']
+
+    plt.figure(figsize=(12, 6))
+    plt.bar(global_data['date'], global_data['total_cured'], label='Total Cured', color='green', alpha=0.6, width=3)
+    plt.title('Global COVID-19 Total Cured (2020-2024)')
+    plt.xlabel('Date')
+    plt.ylabel('Total Cured')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+plot_new_cases('India')
+compare_total_cases(['United States', 'Brazil', 'Russia'])
+plot_total_cured()
